@@ -10,7 +10,7 @@ body {
 
 .container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1440px;
 }
 
 h2 {
@@ -42,10 +42,14 @@ h2 {
   background-color: #e0e0e0;
   border-radius: 5px;
   padding: 10px;
-  width: 300px;
+  width: 380px;
+  max-height: 400px;
+  overflow-y: auto;
   flex-shrink: 0;
   cursor: grab;
   border: 2px solid salmon;
+  cursor: context-menu;
+  position: relative;
 }
 
 .column-header {
@@ -53,10 +57,16 @@ h2 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 4px;
+  border: 2px solid salmon;
+  border-radius: 8px;
+  background-color: rgb(209 250 229);
 }
 
 .column-header input {
   font-size: 1rem;
+  font-weight: 600;
   background: transparent;
   border: none;
   outline: none;
@@ -107,5 +117,3 @@ h2 {
   font-size: 1.5rem;
   cursor: pointer;
 }
-
-

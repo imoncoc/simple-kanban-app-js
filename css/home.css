@@ -1,3 +1,42 @@
 .custom-column {
   border: 2px solid salmon;
 }
+
+/* Editable column title styles */
+.editable {
+  background-color: white !important;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.modal-content {
+  width: 440px;
+}
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  border: #ddd 1px solid;
+  border-radius: 5px;
+  padding: 16px 16px;
+  margin-bottom: 16px;
+}
+.custom-select {
+  width: 100%;
+  padding: 10px;
+  border: #ddd 1px solid;
+  border-radius: 5px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: #888;
+}

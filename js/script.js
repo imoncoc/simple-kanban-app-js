@@ -14,10 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const columnElement = document.createElement("div");
       columnElement.classList.add("column");
       columnElement.id = `column-${column.id}`;
-      columnElement.draggable = true;
-      columnElement.ondragstart = dragColumn;
-      columnElement.ondragover = allowDropColumn;
-      columnElement.ondrop = dropColumn;
+      //   columnElement.draggable = true;
+      //   columnElement.ondragstart = dragColumn;
+      //   columnElement.ondragover = allowDropColumn;
+      //   columnElement.ondrop = dropColumn;
 
       const columnHeader = document.createElement("div");
       columnHeader.classList.add("column-header");
@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const columnTitle = document.createElement("input");
       columnTitle.type = "text";
       columnTitle.value = column.title;
+      columnTitle.readOnly = true; // Make it read-only by default
       columnTitle.onchange = function () {
         column.title = columnTitle.value;
         saveData();
@@ -34,20 +35,42 @@ document.addEventListener("DOMContentLoaded", function () {
       editBtn.textContent = "✏️";
       editBtn.classList.add("icon-btn");
       editBtn.onclick = function () {
+        columnTitle.readOnly = false; // Make it editable
+        columnTitle.classList.add("editable");
         columnTitle.focus();
       };
 
-      columnHeader.appendChild(columnTitle);
-      columnHeader.appendChild(editBtn);
+      columnTitle.onblur = function () {
+        columnTitle.readOnly = true; // Make it read-only again on blur
+        columnTitle.classList.remove("editable");
+        column.title = columnTitle.value;
+        saveData();
+      };
 
       const addTaskBtn = document.createElement("button");
       addTaskBtn.textContent = "Add Task";
+      addTaskBtn.style.width = "100%";
       addTaskBtn.classList.add("primary-btn");
       addTaskBtn.onclick = function () {
         currentColumnId = column.id;
         taskModal.style.display = "flex";
       };
 
+      const deleteBtn = document.createElement("button");
+      //   deleteBtn.textContent = "🗑️";
+      deleteBtn.textContent = "X";
+      deleteBtn.classList.add("icon-delete-btn");
+      deleteBtn.onclick = function () {
+        kanbanData = kanbanData.filter((col) => col.id !== column.id);
+        saveData();
+        renderBoard();
+      };
+
+      columnElement.appendChild(deleteBtn); // Add delete button at the top of the card
+      columnElement.appendChild(columnHeader);
+      columnHeader.appendChild(columnTitle);
+      columnHeader.appendChild(editBtn);
+      columnElement.appendChild(addTaskBtn); // Add Task button below the header
       const columnBody = document.createElement("div");
       columnBody.classList.add("column-body");
       columnBody.ondrop = drop;
@@ -63,8 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
         columnBody.appendChild(taskElement);
       });
 
-      columnElement.appendChild(columnHeader);
-      columnElement.appendChild(addTaskBtn); // Add Task button below the header
       columnElement.appendChild(columnBody);
       kanbanBoard.appendChild(columnElement);
     });
@@ -94,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
   taskForm.onsubmit = function (event) {
     event.preventDefault();
     const title = document.getElementById("task-title").value;
+
     const description = document.getElementById("task-desc").value;
     const newTask = {
       id: Date.now(),

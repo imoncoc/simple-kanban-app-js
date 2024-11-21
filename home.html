@@ -6,6 +6,8 @@
     <title>Dynamic Kanban Board</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/genaral.css" />
+    <link rel="stylesheet" href="./css/home.css" />
+    <link rel="stylesheet" href="./css/login.css" />
   </head>
   <body>
     <div class="container">
@@ -19,14 +21,31 @@
         <span class="close-btn">&times;</span>
         <h2>Add Task</h2>
         <form id="task-form">
-          <input type="text" id="task-title" placeholder="Title" required />
+          <input
+            type="text"
+            id="task-title"
+            class="custom-input"
+            placeholder="Title"
+            required
+          />
           <input
             type="text"
             id="task-desc"
+            class="custom-input"
             placeholder="Description"
             required
           />
-          <button type="submit" class="primary-btn">Add Task</button>
+          <div>
+            <select class="custom-select">
+              <option disabled selected>Select User:</option>
+              <option value="1">imon@gmail.com</option>
+              <option value="2">tonmoy@gmail.com</option>
+              <option value="3">rijvi@gmail.com</option>
+            </select>
+          </div>
+          <button type="submit" class="primary-btn" style="width: 100%">
+            Add Task
+          </button>
         </form>
       </div>
     </div>
