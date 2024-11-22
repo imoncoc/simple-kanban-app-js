@@ -31,9 +31,11 @@
   border: 1px solid #379981;
   border-radius: 4px;
 }
+
 .primary-btn:hover {
   background: #37a08e;
 }
+
 .icon-btn {
   padding: 8px 12px;
   background: rgb(253 186 116);
@@ -42,9 +44,11 @@
   border: 1px solid rgb(253 186 116);
   border-radius: 8px;
 }
+
 .icon-btn:hover {
   background: rgb(249 115 22);
 }
+
 /* .icon-delete-btn {
   padding: 8px 12px;
   background: rgb(251 113 133);
@@ -69,6 +73,7 @@
   background-color: #eee;
   border-radius: 50%;
 }
+
 .icon-delete-btn:hover {
   background: rgb(225 29 72);
 }

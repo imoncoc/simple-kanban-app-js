@@ -1,0 +1,29 @@
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        display: block;
+    }
+
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #007bff;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    .nav-item {
+        text-align: center;
+        border-bottom: 1px solid #0056b3;
+    }
+
+    .nav-item a {
+        margin: 0;
+    }
+}

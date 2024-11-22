@@ -1,3 +1,7 @@
+// Mobile Navigation Start
+
+// Mobile Navigation End
+
 document.addEventListener("DOMContentLoaded", function () {
   const kanbanBoard = document.getElementById("kanban-board");
   const addColumnBtn = document.getElementById("add-column-btn");
@@ -82,7 +86,12 @@ document.addEventListener("DOMContentLoaded", function () {
         taskElement.id = `task-${task.id}`;
         taskElement.draggable = true;
         taskElement.ondragstart = drag;
-        taskElement.textContent = `${task.title}: ${task.description}`;
+        taskElement.innerHTML = `<div class="task-content">
+      <h4 class="task-title">${task.title}</h4>
+      <p class="task-description">${task.description}</p>
+      <span class="task-assignee">Assigned to: <strong>${task.email}</strong></span>
+    </div>`;
+
         columnBody.appendChild(taskElement);
       });
 
@@ -117,10 +126,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const title = document.getElementById("task-title").value;
 
     const description = document.getElementById("task-desc").value;
+    const selectedEmail =
+      selectElement.options[selectElement.selectedIndex]?.text;
+    if (!selectedEmail || selectedEmail === "Select User:") {
+      alert("Please select a user!");
+      return;
+    }
     const newTask = {
       id: Date.now(),
       title: title,
       description: description,
+      email: selectedEmail,
     };
     kanbanData.forEach((column) => {
       if (column.id === currentColumnId) {
@@ -204,4 +220,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   renderBoard();
+});
+
+// Select User
+const users = JSON.parse(localStorage.getItem("users"));
+
+// Get the <select> element
+const selectElement = document.querySelector(".custom-select");
+
+// Populate the select with options
+users.forEach((user) => {
+  const option = document.createElement("option");
+  option.value = user.id; // Use the user ID as the value
+  option.textContent = user.email; // Display the email
+  selectElement.appendChild(option);
 });
