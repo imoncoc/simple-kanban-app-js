@@ -102,7 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
         taskElement.innerHTML = `
           <div class="task-content">
             <h4 class="task-title">${task.title}</h4>
-            <p class="task-description">${task.description}</p>
+            
+            <div class="task-description">${task.description}</div>
             <span class="task-assignee">Assigned to: <strong>${task.email}</strong></span>
           </div>
         `;
@@ -138,7 +139,8 @@ document.addEventListener("DOMContentLoaded", function () {
   taskForm.onsubmit = function (event) {
     event.preventDefault();
     const title = document.getElementById("task-title").value;
-    const description = document.getElementById("task-desc").value;
+    // const description = document.getElementById("task-desc").value;
+    const description = quill.root.innerHTML;
     const selectedEmail =
       selectElement.options[selectElement.selectedIndex]?.text;
     if (!selectedEmail || selectedEmail === "Select User:") {
@@ -160,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
     renderBoard();
     taskModal.style.display = "none";
     taskForm.reset();
+    quill.root.innerHTML = "";
   };
 
   function allowDrop(event) {

@@ -71,7 +71,7 @@ function initializeRandomUsers() {
       },
       {
         id: Date.now() + 1,
-        name: "Rijvi",
+        name: "Rizvi",
         email: "rijvi@example.com",
         password: "password123",
       },
