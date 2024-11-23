@@ -1,3 +1,13 @@
+const logout = function () {
+  localStorage.removeItem("loginCredentials");
+  window.location.href = "index.html";
+};
+
+const userLoginCredentials = localStorage.getItem("loginCredentials");
+if (!userLoginCredentials) {
+  window.location.href = "index.html";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const kanbanBoard = document.getElementById("kanban-board");
   const addColumnBtn = document.getElementById("add-column-btn");
@@ -21,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
       columnElement.classList.add("column");
       columnElement.id = `column-${column.id}`;
 
-      // Use template literals for column structure
       columnElement.innerHTML = `
         <button class="icon-delete-btn">X</button>
         <div class="column-header">
@@ -37,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="column-body"></div>
       `;
 
-      // Add event listeners for column actions
       const deleteBtn = columnElement.querySelector(".icon-delete-btn");
       deleteBtn.onclick = () => {
         kanbanData = kanbanData.filter((col) => col.id !== column.id);
@@ -74,6 +82,15 @@ document.addEventListener("DOMContentLoaded", function () {
       columnBody.ondrop = drop;
       columnBody.ondragover = allowDrop;
 
+      if (column.tasks.length === 0) {
+        const noTasksMessage = document.createElement("div");
+        noTasksMessage.innerHTML = `
+        <div class="task-content" style="padding: 20px 0px">
+            <p class="task-title">${"Drag and drop tasks here to organize or Add Task."}</p>
+          </div>`;
+        columnBody.appendChild(noTasksMessage);
+      }
+
       column.tasks.forEach((task) => {
         const taskElement = document.createElement("div");
         taskElement.classList.add("task");
@@ -81,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         taskElement.draggable = true;
         taskElement.ondragstart = drag;
 
-        // Use template literals for task structure
+        // task
         taskElement.innerHTML = `
           <div class="task-content">
             <h4 class="task-title">${task.title}</h4>
@@ -189,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
   renderBoard();
 });
 
-// Populate the user select options
 const users = JSON.parse(localStorage.getItem("users"));
 const selectElement = document.querySelector(".custom-select");
 

@@ -57,3 +57,34 @@ function handleLogin() {
     alert("Invalid email or password!");
   }
 }
+
+function initializeRandomUsers() {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+
+  if (users.length === 0) {
+    const randomUsers = [
+      {
+        id: Date.now(),
+        name: "Tonmoy",
+        email: "tonmoy@example.com",
+        password: "password123",
+      },
+      {
+        id: Date.now() + 1,
+        name: "Rijvi",
+        email: "rijvi@example.com",
+        password: "password123",
+      },
+      {
+        id: Date.now() + 2,
+        name: "Mynul",
+        email: "mynul@example.com",
+        password: "password123",
+      },
+    ];
+
+    localStorage.setItem("users", JSON.stringify(randomUsers));
+  }
+}
+
+initializeRandomUsers();

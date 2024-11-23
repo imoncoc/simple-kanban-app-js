@@ -2,7 +2,7 @@
   border: 2px solid salmon;
 }
 
-/* Editable column title styles */
+
 .editable {
   background-color: white !important;
   border: 1px solid #ccc;
@@ -14,6 +14,7 @@
 .modal-content {
   width: 440px;
 }
+
 .custom-input {
   width: 100%;
   padding: 10px;
@@ -22,6 +23,7 @@
   padding: 16px 16px;
   margin-bottom: 16px;
 }
+
 .custom-select {
   width: 100%;
   padding: 10px;

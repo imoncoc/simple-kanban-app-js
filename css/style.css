@@ -5,7 +5,9 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
+  background-color: #344a72;
+  color: #fff;
 }
 
 
@@ -15,24 +17,17 @@ body {
   max-width: 1440px;
 }
 
+.logout-container {
+  display: flex;
+  justify-content: end;
+}
+
 h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.primary-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
 
-.primary-btn:hover {
-  background-color: #0056b3;
-}
 
 .kanban-board {
   display: flex;
@@ -81,6 +76,7 @@ h2 {
   padding: 10px;
   background-color: #fff;
   border-radius: 5px;
+  margin-top: 20px;
 }
 
 .task {
@@ -90,6 +86,7 @@ h2 {
   margin-bottom: 10px;
   border-radius: 3px;
   cursor: grab;
+
 }
 
 .modal {
