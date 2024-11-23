@@ -152,3 +152,10 @@ h2 {
   color: #777;
   text-align: right;
 }
+
+.task-button-container {
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+  margin-top: 12px;
+}

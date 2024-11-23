@@ -48,6 +48,34 @@
   background: #dc2626;
 }
 
+.delete-task-btn {
+  padding: 8px 12px;
+  width: 100%;
+  background: #ef4444;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+}
+
+.delete-task-btn:hover {
+  background: #dc2626;
+}
+
+.edit-task-btn {
+  padding: 8px 12px;
+  width: 100%;
+  background: rgb(253 186 116);
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid rgb(253 186 116);
+  border-radius: 4px;
+}
+
+.edit-task-btn:hover {
+  background: rgb(249 115 22);
+}
+
 .icon-btn {
   padding: 8px 12px;
   background: rgb(253 186 116);

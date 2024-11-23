@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeModalBtn = document.querySelector(".close-btn");
   const taskForm = document.getElementById("task-form");
   let currentColumnId = null;
+  let currentTaskId = null;
 
   let kanbanData = JSON.parse(localStorage.getItem("kanbanData")) || [];
 
@@ -24,9 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const columnElement = document.createElement("div");
       columnElement.setAttribute(
         "style",
-        " background-color: lightblue; border: 1px solid #ccc; padding: 10px; margin: 10px; display: flex; flex-direction: column; max-height: 600px"
+        "background-color: lightblue; border: 1px solid #ccc; padding: 10px; margin: 10px; display: flex; flex-direction: column; max-height: 600px"
       );
-      columnElement.innerText = "Styled Div";
 
       columnElement.classList.add("column");
       columnElement.id = `column-${column.id}`;
@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const addTaskBtn = columnElement.querySelector(".primary-btn");
       addTaskBtn.onclick = () => {
         currentColumnId = column.id;
+        currentTaskId = null;
+        taskForm.reset();
+        quill.root.innerHTML = "";
         taskModal.style.display = "flex";
       };
 
@@ -98,15 +101,43 @@ document.addEventListener("DOMContentLoaded", function () {
         taskElement.draggable = true;
         taskElement.ondragstart = drag;
 
-        // task
         taskElement.innerHTML = `
           <div class="task-content">
             <h4 class="task-title">${task.title}</h4>
-            
             <div class="task-description">${task.description}</div>
             <span class="task-assignee">Assigned to: <strong>${task.email}</strong></span>
+            <div class="task-button-container">
+            <button class="edit-task-btn ">Edit</button>
+            <button class="delete-task-btn ">Delete</button>
+            </div>
           </div>
         `;
+
+        const editTaskBtn = taskElement.querySelector(".edit-task-btn");
+        editTaskBtn.onclick = () => {
+          currentColumnId = column.id;
+          currentTaskId = task.id;
+          document.getElementById("task-title").value = task.title;
+          quill.root.innerHTML = task.description;
+          const option = [...selectElement.options].find(
+            (opt) => opt.text === task.email
+          );
+          if (option) {
+            selectElement.value = option.value;
+          } else {
+            selectElement.value = "Select User:";
+          }
+          taskModal.style.display = "flex";
+        };
+
+        const deleteTaskBtn = taskElement.querySelector(".delete-task-btn");
+        deleteTaskBtn.onclick = () => {
+          kanbanData.forEach((column) => {
+            column.tasks = column.tasks.filter((t) => t.id !== task.id);
+          });
+          saveData();
+          renderBoard();
+        };
 
         columnBody.appendChild(taskElement);
       });
@@ -139,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
   taskForm.onsubmit = function (event) {
     event.preventDefault();
     const title = document.getElementById("task-title").value;
-    // const description = document.getElementById("task-desc").value;
     const description = quill.root.innerHTML;
     const selectedEmail =
       selectElement.options[selectElement.selectedIndex]?.text;
@@ -153,11 +183,23 @@ document.addEventListener("DOMContentLoaded", function () {
       description: description,
       email: selectedEmail,
     };
-    kanbanData.forEach((column) => {
-      if (column.id === currentColumnId) {
-        column.tasks.push(newTask);
-      }
-    });
+    if (currentTaskId) {
+      kanbanData.forEach((column) => {
+        column.tasks.forEach((task) => {
+          if (task.id === currentTaskId) {
+            task.title = title;
+            task.description = description;
+            task.email = selectedEmail;
+          }
+        });
+      });
+    } else {
+      kanbanData.forEach((column) => {
+        if (column.id === currentColumnId) {
+          column.tasks.push(newTask);
+        }
+      });
+    }
     saveData();
     renderBoard();
     taskModal.style.display = "none";
@@ -209,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
   renderBoard();
 });
 
-const users = JSON.parse(localStorage.getItem("users"));
+const users = JSON.parse(localStorage.getItem("users")) || [];
 const selectElement = document.querySelector(".custom-select");
 
 users.forEach((user) => {
