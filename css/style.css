@@ -49,7 +49,7 @@ h2 {
   overflow-y: auto;
   flex-shrink: 0;
   cursor: grab;
-  border: 2px solid salmon;
+  /* border: 2px solid salmon; */
   cursor: context-menu;
   position: relative;
 }
@@ -61,7 +61,7 @@ h2 {
   margin-bottom: 10px;
   margin-top: 10px;
   padding: 4px;
-  border: 2px solid salmon;
+  /* border: 2px solid salmon; */
   border-radius: 8px;
   background-color: rgb(209 250 229);
 }
@@ -76,7 +76,7 @@ h2 {
 }
 
 .column-body {
-  min-height: 150px;
+  height: auto;
   border: 1px solid #ccc;
   padding: 10px;
   background-color: #fff;
@@ -134,6 +134,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 5px;
+
 }
 
 .task-title {

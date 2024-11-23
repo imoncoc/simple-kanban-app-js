@@ -1,7 +1,3 @@
-// Mobile Navigation Start
-
-// Mobile Navigation End
-
 document.addEventListener("DOMContentLoaded", function () {
   const kanbanBoard = document.getElementById("kanban-board");
   const addColumnBtn = document.getElementById("add-column-btn");
@@ -13,70 +9,68 @@ document.addEventListener("DOMContentLoaded", function () {
   let kanbanData = JSON.parse(localStorage.getItem("kanbanData")) || [];
 
   function renderBoard() {
-    kanbanBoard.innerHTML = "";
+    kanbanBoard.innerHTML = ""; // Clear existing board
     kanbanData.forEach((column) => {
       const columnElement = document.createElement("div");
+      columnElement.setAttribute(
+        "style",
+        " background-color: lightblue; border: 1px solid #ccc; padding: 10px; margin: 10px; display: flex; flex-direction: column; max-height: 600px"
+      );
+      columnElement.innerText = "Styled Div";
+
       columnElement.classList.add("column");
       columnElement.id = `column-${column.id}`;
-      //   columnElement.draggable = true;
-      //   columnElement.ondragstart = dragColumn;
-      //   columnElement.ondragover = allowDropColumn;
-      //   columnElement.ondrop = dropColumn;
 
-      const columnHeader = document.createElement("div");
-      columnHeader.classList.add("column-header");
+      // Use template literals for column structure
+      columnElement.innerHTML = `
+        <button class="icon-delete-btn">X</button>
+        <div class="column-header">
+          <input 
+            type="text" 
+            class="column-title" 
+            value="${column.title}" 
+            readonly
+          />
+          <button class="icon-btn">✏️</button>
+        </div>
+        <button class="primary-btn" style="width: 100%;">Add Task</button>
+        <div class="column-body"></div>
+      `;
 
-      const columnTitle = document.createElement("input");
-      columnTitle.type = "text";
-      columnTitle.value = column.title;
-      columnTitle.readOnly = true; // Make it read-only by default
-      columnTitle.onchange = function () {
-        column.title = columnTitle.value;
-        saveData();
-      };
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "✏️";
-      editBtn.classList.add("icon-btn");
-      editBtn.onclick = function () {
-        columnTitle.readOnly = false; // Make it editable
-        columnTitle.classList.add("editable");
-        columnTitle.focus();
-      };
-
-      columnTitle.onblur = function () {
-        columnTitle.readOnly = true; // Make it read-only again on blur
-        columnTitle.classList.remove("editable");
-        column.title = columnTitle.value;
-        saveData();
-      };
-
-      const addTaskBtn = document.createElement("button");
-      addTaskBtn.textContent = "Add Task";
-      addTaskBtn.style.width = "100%";
-      addTaskBtn.classList.add("primary-btn");
-      addTaskBtn.onclick = function () {
-        currentColumnId = column.id;
-        taskModal.style.display = "flex";
-      };
-
-      const deleteBtn = document.createElement("button");
-      //   deleteBtn.textContent = "🗑️";
-      deleteBtn.textContent = "X";
-      deleteBtn.classList.add("icon-delete-btn");
-      deleteBtn.onclick = function () {
+      // Add event listeners for column actions
+      const deleteBtn = columnElement.querySelector(".icon-delete-btn");
+      deleteBtn.onclick = () => {
         kanbanData = kanbanData.filter((col) => col.id !== column.id);
         saveData();
         renderBoard();
       };
 
-      columnElement.appendChild(deleteBtn); // Add delete button at the top of the card
-      columnElement.appendChild(columnHeader);
-      columnHeader.appendChild(columnTitle);
-      columnHeader.appendChild(editBtn);
-      columnElement.appendChild(addTaskBtn); // Add Task button below the header
-      const columnBody = document.createElement("div");
-      columnBody.classList.add("column-body");
+      const columnTitle = columnElement.querySelector(".column-title");
+      const editBtn = columnElement.querySelector(".icon-btn");
+      editBtn.onclick = () => {
+        columnTitle.readOnly = false;
+        columnTitle.classList.add("editable");
+        columnTitle.focus();
+      };
+
+      columnTitle.onchange = () => {
+        column.title = columnTitle.value;
+        saveData();
+      };
+
+      columnTitle.onblur = () => {
+        columnTitle.readOnly = true;
+        columnTitle.classList.remove("editable");
+        saveData();
+      };
+
+      const addTaskBtn = columnElement.querySelector(".primary-btn");
+      addTaskBtn.onclick = () => {
+        currentColumnId = column.id;
+        taskModal.style.display = "flex";
+      };
+
+      const columnBody = columnElement.querySelector(".column-body");
       columnBody.ondrop = drop;
       columnBody.ondragover = allowDrop;
 
@@ -86,16 +80,19 @@ document.addEventListener("DOMContentLoaded", function () {
         taskElement.id = `task-${task.id}`;
         taskElement.draggable = true;
         taskElement.ondragstart = drag;
-        taskElement.innerHTML = `<div class="task-content">
-      <h4 class="task-title">${task.title}</h4>
-      <p class="task-description">${task.description}</p>
-      <span class="task-assignee">Assigned to: <strong>${task.email}</strong></span>
-    </div>`;
+
+        // Use template literals for task structure
+        taskElement.innerHTML = `
+          <div class="task-content">
+            <h4 class="task-title">${task.title}</h4>
+            <p class="task-description">${task.description}</p>
+            <span class="task-assignee">Assigned to: <strong>${task.email}</strong></span>
+          </div>
+        `;
 
         columnBody.appendChild(taskElement);
       });
 
-      columnElement.appendChild(columnBody);
       kanbanBoard.appendChild(columnElement);
     });
   }
@@ -124,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
   taskForm.onsubmit = function (event) {
     event.preventDefault();
     const title = document.getElementById("task-title").value;
-
     const description = document.getElementById("task-desc").value;
     const selectedEmail =
       selectElement.options[selectElement.selectedIndex]?.text;
@@ -186,35 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function allowDropColumn(event) {
-    event.preventDefault();
-  }
-
-  function dragColumn(event) {
-    event.dataTransfer.setData("text", event.target.id);
-  }
-
-  function dropColumn(event) {
-    event.preventDefault();
-    const data = event.dataTransfer.getData("text");
-    const draggedColumn = document.getElementById(data);
-    const dropzone = event.target.closest(".kanban-board");
-
-    if (dropzone && draggedColumn) {
-      const draggedIndex = Array.from(dropzone.children).indexOf(draggedColumn);
-      const droppedIndex = Array.from(dropzone.children).indexOf(
-        event.target.closest(".column")
-      );
-
-      if (draggedIndex > -1 && droppedIndex > -1) {
-        const [draggedColumnData] = kanbanData.splice(draggedIndex, 1);
-        kanbanData.splice(droppedIndex, 0, draggedColumnData);
-        saveData();
-        renderBoard();
-      }
-    }
-  }
-
   function saveData() {
     localStorage.setItem("kanbanData", JSON.stringify(kanbanData));
   }
@@ -222,16 +189,10 @@ document.addEventListener("DOMContentLoaded", function () {
   renderBoard();
 });
 
-// Select User
+// Populate the user select options
 const users = JSON.parse(localStorage.getItem("users"));
-
-// Get the <select> element
 const selectElement = document.querySelector(".custom-select");
 
-// Populate the select with options
 users.forEach((user) => {
-  const option = document.createElement("option");
-  option.value = user.id; // Use the user ID as the value
-  option.textContent = user.email; // Display the email
-  selectElement.appendChild(option);
+  selectElement.innerHTML += `<option value="${user.id}">${user.email}</option>`;
 });
